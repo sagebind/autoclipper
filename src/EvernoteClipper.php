@@ -1,16 +1,17 @@
 <?php
 namespace AutoClipper;
 
-use Nette\Mail\Message;
-use Nette\Mail\SendmailMailer;
-
 class EvernoteClipper
 {
     private $secretEmail;
+    private $mailer;
+    private $sender;
 
-    public function __construct($secretEmail)
+    public function __construct($secretEmail, $sender, \Swift_Mailer $mailer)
     {
         $this->secretEmail = $secretEmail;
+        $this->mailer = $mailer;
+        $this->sender = $sender;
     }
 
     public function clip($title, $html, $notebook = null, $tags = [])
@@ -23,12 +24,11 @@ class EvernoteClipper
             $title .= ' #'.$tag;
         }
 
-        $message = new Message();
-        $message->addTo($this->secretEmail)
+        $message = \Swift_Message::newInstance()
             ->setSubject($title)
-            ->setHTMLBody($html);
-
-        $mailer = new SendmailMailer();
-        $mailer->send($message);
+            ->setTo([$this->secretEmail])
+            ->setFrom($this->sender)
+            ->setBody($html, 'text/html');
+        $this->mailer->send($message);
     }
 }

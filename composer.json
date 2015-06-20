@@ -1,6 +1,6 @@
 {
     "require": {
-        "nette/mail": "^2.3"
+        "swiftmailer/swiftmailer": "^5.4"
     },
     "autoload": {
         "psr-4": {

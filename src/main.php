@@ -8,18 +8,13 @@ if (!isset($_GET['url'])) {
     exit;
 }
 
-if (!isset($_GET['token'])) {
-    echo 'Error: No Readability API key given';
-    exit;
-}
+$transport = \Swift_SmtpTransport::newInstance($config['smtp']['host'], 25)
+    ->setUsername($config['smtp']['username'])
+    ->setPassword($config['smtp']['password']);
+$mailer = \Swift_Mailer::newInstance($transport);
 
-if (!isset($_GET['email'])) {
-    echo 'Error: No Evernote email address given';
-    exit;
-}
-
-$readability = new Readability($_GET['token']);
-$evernote = new EvernoteClipper($_GET['email']);
+$readability = new Readability($config['readability_token']);
+$evernote = new EvernoteClipper($config['evernote_email'], $config['sender'], $mailer);
 
 $article = $readability->parseUrl($_GET['url']);
 
