@@ -4,14 +4,10 @@ namespace AutoClipper;
 class EvernoteClipper
 {
     private $secretEmail;
-    private $mailer;
-    private $sender;
 
-    public function __construct($secretEmail, $sender, \Swift_Mailer $mailer)
+    public function __construct($secretEmail)
     {
         $this->secretEmail = $secretEmail;
-        $this->mailer = $mailer;
-        $this->sender = $sender;
     }
 
     public function clip($title, $html, $notebook = null, $tags = [])
@@ -27,8 +23,11 @@ class EvernoteClipper
         $message = \Swift_Message::newInstance()
             ->setSubject($title)
             ->setTo([$this->secretEmail])
-            ->setFrom($this->sender)
+            ->setFrom($this->secretEmail)
             ->setBody($html, 'text/html');
-        $this->mailer->send($message);
+
+        $transport = \Swift_MailTransport::newInstance();
+        $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer->send($message);
     }
 }
