@@ -26,7 +26,7 @@ $article = $readability->parseUrl($_GET['url']);
 $notebook = isset($_GET['notebook']) ? $_GET['notebook'] : null;
 $tags = isset($_GET['tags']) ? explode(',', $_GET['tags']) : [];
 
-$html = '<h1>'.$article->title.'</h1>';
+$html = '<h1><a href="'.$article->url.'">'.$article->title.'</a></h1>';
 if (isset($article->author)) {
     $html .= '<p>'.$article->author.'</p>';
 }
