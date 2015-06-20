@@ -1,0 +1,13 @@
+{
+    "main": "src/main.php",
+    "output": "autoclipper.phar",
+    "directories": [
+        "src",
+        "vendor"
+    ],
+    "stub": true,
+    "chmod": "0755",
+    "compression": "NONE",
+    "algorithm": "SHA512",
+    "shebang": false
+}
